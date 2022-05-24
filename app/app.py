@@ -287,6 +287,28 @@ def create_app(args):
         response.headers.add("Access-Control-Max-Age", 60 * 60 * 24 * 20)
         return response
 
+    @app.post("/pyklatchat")
+    def pyklatchat_translate():
+      print("pyklatchat")
+      pyklatchat_data = get_json_dict(request)
+
+      pyklatchat_translation = {}
+      for conversation_key in pyklatchat_data:
+        conversation = pyklatchat_data[conversation_key]
+        requests_data = {
+          "q": list(conversation["shouts"].values()),
+          "source": "auto",
+          "target": conversation["lang"]
+        }
+        translation = get_json_dict(translate_request(requests_data))["translatedText"]
+        shouts = dict(zip(conversation["shouts"].keys(), translation))
+        pyklatchat_translation[conversation_key] = {
+          "lang": conversation["lang"],
+          "shouts": shouts
+        }
+      
+      return jsonify(pyklatchat_translation)
+
     @app.post("/translate")
     @access_check
     def translate():
