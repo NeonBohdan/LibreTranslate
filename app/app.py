@@ -291,10 +291,15 @@ def create_app(args):
     @access_check
     def translate():
       print("redirect translate")
-      translation = translate_request()
+      # parse
+      if request.is_json:
+        requests_data = get_json_dict(request)
+      else:
+        requests_data = request.values
+      translation = translate_request(requests_data)
       return translation
 
-    def translate_request():
+    def translate_request(requests_data: dict):
         """
         Translate text from a language to another
         ---
@@ -393,17 +398,11 @@ def create_app(args):
                   type: string
                   description: Error message
         """
-        if request.is_json:
-            json = get_json_dict(request)
-            q = json.get("q")
-            source_lang = json.get("source")
-            target_lang = json.get("target")
-            text_format = json.get("format")
-        else:
-            q = request.values.get("q")
-            source_lang = request.values.get("source")
-            target_lang = request.values.get("target")
-            text_format = request.values.get("format")
+        # get fields
+        q = requests_data.get("q")
+        source_lang = requests_data.get("source")
+        target_lang = requests_data.get("target")
+        text_format = requests_data.get("format")
 
         if not q:
             abort(400, description="Invalid request: missing q parameter")
