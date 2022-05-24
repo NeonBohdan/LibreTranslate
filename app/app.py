@@ -290,6 +290,11 @@ def create_app(args):
     @app.post("/translate")
     @access_check
     def translate():
+      print("redirect translate")
+      translation = translate_request()
+      return translation
+
+    def translate_request():
         """
         Translate text from a language to another
         ---
