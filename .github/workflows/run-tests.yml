@@ -1,11 +1,11 @@
 name: Run tests
-# Run test at each push to main, if changes to package or tests files
+# Run test at each push to pyklatchat, if changes to package or tests files
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ main ]
+    branches: [ pyklatchat ]
   push:
-    branches: [ main ]
+    branches: [ pyklatchat ]
     paths:
     - '*.py'
     - 'requirements.txt'
