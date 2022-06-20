@@ -10,7 +10,7 @@ from app.main import get_args
 def app():
     sys.argv = ['']
     DEFAULT_ARGUMENTS['LOAD_ONLY'] = "en,es"
-    app = create_app(get_args())
+    app, _ = create_app(get_args())
 
     yield app
 

@@ -118,7 +118,7 @@ def get_args():
 
 def main():
     args = get_args()
-    app = create_app(args)
+    app, translate_request = create_app(args)
 
     if sys.argv[0] == '--wsgi':
         return app

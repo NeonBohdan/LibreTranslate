@@ -287,11 +287,8 @@ def create_app(args):
         response.headers.add("Access-Control-Max-Age", 60 * 60 * 24 * 20)
         return response
 
-    @app.post("/pyklatchat")
-    def pyklatchat_translate():
+    def pyklatchat_translate_request(pyklatchat_data: dict):
       print("pyklatchat")
-      pyklatchat_data = get_json_dict(request)
-
       pyklatchat_translation = {}
       for conversation_key in pyklatchat_data:
         conversation = pyklatchat_data[conversation_key]
@@ -993,4 +990,4 @@ def create_app(args):
 
     app.register_blueprint(swaggerui_blueprint)
 
-    return app
+    return app, pyklatchat_translate_request
