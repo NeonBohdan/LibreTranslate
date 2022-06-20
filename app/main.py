@@ -5,6 +5,8 @@ import sys
 from app.app import create_app
 from app.default_values import DEFAULT_ARGUMENTS as DEFARGS
 
+from app.rmq import LibreMQ
+
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -120,6 +122,12 @@ def main():
     args = get_args()
     app, translate_request = create_app(args)
 
+    # Run RabbitMQ
+    libreMQ = LibreMQ(app = app, translate_request = translate_request)
+    libreMQ.run(run_sync=False, run_consumers=True,
+                      daemonize_consumers=True)
+
+    # Run Flask
     if sys.argv[0] == '--wsgi':
         return app
     else:
