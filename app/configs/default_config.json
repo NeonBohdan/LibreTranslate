@@ -1,0 +1,11 @@
+{
+    "MQ": {
+        "server": "api.neon.ai",
+        "users": {
+            "mq-libre-translate": {
+                "user": "mq-libre-translate",
+                "password": "Klatchat2021"
+            }
+        }
+    }
+}
