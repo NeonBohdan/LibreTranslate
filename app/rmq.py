@@ -1,7 +1,10 @@
 import pika
+import json
+import os.path
 from flask import Flask
 from typing import Callable
 
+from neon_utils import LOG
 from neon_mq_connector.connector import MQConnector
 from neon_mq_connector.utils.rabbit_utils import create_mq_callback
 
@@ -11,8 +14,8 @@ class LibreMQ(MQConnector):
     Module for processing MQ requests from PyKlatchat to LibreTranslate"""
 
     def __init__(self, app: Flask, translate_request: Callable):
-        super().__init__(config = {"MQ": {'users':{'mq-libre-translate':{}}}}, 
-                         service_name = 'mq-libre-translate')
+        config = self.load_mq_config()
+        super().__init__(config = config, service_name = 'mq-libre-translate')
 
         self.app = app
         self.translate_request = translate_request
@@ -24,6 +27,15 @@ class LibreMQ(MQConnector):
                                callback=self.handle_translate_request,
                                on_error=self.default_error_handler,
                                auto_ack=False)
+
+    def load_mq_config(self, config_path: str = "app/configs/config.json"):
+        default_config_path = "app/configs/default_config.json"
+
+        config_path = config_path if os.path.isfile(config_path) else default_config_path
+        with open(config_path) as config_file:
+            config = json.load(config_file)
+        LOG.info(f"Loaded MQ config from path {config_path}")
+        return config
 
     def send_responce(self, message: dict,
                             routing_key: str):

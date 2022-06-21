@@ -11,6 +11,13 @@ Free and Open Source Machine Translation API, entirely self-hosted. Unlike other
 
 [Try it online!](https://libretranslate.com) | [API Docs](https://libretranslate.com/docs)
 
+## Run with PyKlatchat
+
+```
+docker run -it -p 5000:5000 -v <config_path>:/app/app/configs/config.json:ro libretranslate
+```
+where `<config_path>` - absolute path to MQ config
+
 ## API Examples
 
 
