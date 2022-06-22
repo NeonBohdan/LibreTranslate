@@ -13,6 +13,7 @@ from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
 from translatehtml import translate_html
 from werkzeug.utils import secure_filename
+import werkzeug.exceptions as werkex
 
 from app import flood, remove_translated_files, security
 from app.language import detect_languages, transliterate
@@ -297,12 +298,20 @@ def create_app(args):
           "source": "auto",
           "target": conversation["lang"]
         }
-        translation = get_json_dict(translate_request(requests_data))["translatedText"]
-        shouts = dict(zip(conversation["shouts"].keys(), translation))
-        pyklatchat_translation[conversation_key] = {
-          "lang": conversation["lang"],
-          "shouts": shouts
-        }
+        try:
+          translation = get_json_dict(translate_request(requests_data))["translatedText"]
+          shouts = dict(zip(conversation["shouts"].keys(), translation))
+          pyklatchat_translation[conversation_key] = {
+            "code": 200,
+            "lang": conversation["lang"],
+            "shouts": shouts
+          }
+        except (werkex.BadRequest, werkex.InternalServerError,   # 400, 500
+                werkex.TooManyRequests, werkex.Forbidden) as err:# 429, 493
+          pyklatchat_translation[conversation_key] = {
+            "code": err.code,
+            "description": err.description,
+          }
       
       return jsonify(pyklatchat_translation)
 
