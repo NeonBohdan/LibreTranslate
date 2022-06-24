@@ -52,10 +52,16 @@ class LibreMQ(MQConnector):
 
         """
         body.pop("message_id", None)
+        request_id = body["request_id"]
+        pyklatchat_data = body["data"]
 
         with self.app.app_context():
-            translation_json = self.translate_request(body)
+            translation_json = self.translate_request(pyklatchat_data)
             translation = translation_json.json
 
-        self.send_message(translation, queue = 'get_libre_translations')
+        translation_response = {
+            "request_id": request_id,
+            "data": translation
+        }
+        self.send_message(translation_response, queue = 'get_libre_translations')
         channel.basic_ack(method.delivery_tag)
