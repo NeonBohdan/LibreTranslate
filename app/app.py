@@ -295,7 +295,7 @@ def create_app(args):
         conversation = pyklatchat_data[conversation_key]
         requests_data = {
           "q": list(conversation["shouts"].values()),
-          "source": "auto",
+          "source": conversation.get("source_lang", "en"),
           "target": conversation["lang"]
         }
         try:
