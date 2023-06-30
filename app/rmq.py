@@ -16,7 +16,7 @@ class LibreMQ(MQConnector):
 
     def __init__(self, app: Flask, translate_request: Callable):
         config = self.load_mq_config()
-        super().__init__(config = config, service_name = 'mq-libre-translate')
+        super().__init__(config=config, service_name='mq-libre-translate')
 
         self.app = app
         self.translate_request = translate_request
@@ -43,7 +43,7 @@ class LibreMQ(MQConnector):
             with open(default_config_path) as config_file:
                 config = json.load(config_file)
         LOG.info(f"Loaded MQ config")
-        return config
+        return config.get("MQ", config)
 
     @create_mq_callback(include_callback_props=('channel', 'method', 'body'))
     def handle_translate_request(self,
