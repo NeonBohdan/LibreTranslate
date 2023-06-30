@@ -7,6 +7,7 @@ from typing import Callable
 from neon_utils import LOG
 from neon_mq_connector.connector import MQConnector
 from neon_mq_connector.utils.rabbit_utils import create_mq_callback
+from ovos_config.config import Configuration
 
 
 class LibreMQ(MQConnector):
@@ -30,11 +31,18 @@ class LibreMQ(MQConnector):
 
     def load_mq_config(self, config_path: str = "app/configs/config.json"):
         default_config_path = "app/configs/default_config.json"
+        if config_path:
+            LOG.warning(f"Legacy configuration found at: {config_path}")
+            with open(config_path) as config_file:
+                config = json.load(config_file)
+            return config
 
-        config_path = config_path if os.path.isfile(config_path) else default_config_path
-        with open(config_path) as config_file:
-            config = json.load(config_file)
-        LOG.info(f"Loaded MQ config from path {config_path}")
+        config = Configuration()
+        if not config.get("MQ"):
+            LOG.warning("No MQ config found, using default")
+            with open(default_config_path) as config_file:
+                config = json.load(config_file)
+        LOG.info(f"Loaded MQ config")
         return config
 
     @create_mq_callback(include_callback_props=('channel', 'method', 'body'))

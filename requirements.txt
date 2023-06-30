@@ -17,3 +17,4 @@ itsdangerous==2.1.2
 Werkzeug==2.1.2
 # Neon
 neon-mq-connector~=0.5
+ovos-config~=0.0.10
