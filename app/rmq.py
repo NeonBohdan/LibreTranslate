@@ -4,7 +4,7 @@ import os.path
 from flask import Flask
 from typing import Callable
 
-from neon_utils import LOG
+from ovos_utils.log import LOG
 from neon_mq_connector.connector import MQConnector
 from neon_mq_connector.utils.rabbit_utils import create_mq_callback
 from ovos_config.config import Configuration
