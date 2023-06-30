@@ -16,4 +16,6 @@ argos-translate-files==1.0.5
 itsdangerous==2.1.2
 Werkzeug==2.1.2
 # Neon
-neon-mq-connector~=0.5
+neon-mq-connector~=0.7
+ovos-config~=0.0.10
+ovos-utils~=0.0.30

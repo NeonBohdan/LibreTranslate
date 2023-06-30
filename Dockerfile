@@ -1,7 +1,11 @@
 FROM python:3.8.12-slim-bullseye
 
 ARG with_models=false
-ARG models=
+ARG models
+
+ENV OVOS_CONFIG_BASE_FOLDER neon
+ENV OVOS_CONFIG_FILENAME diana.yaml
+ENV XDG_CONFIG_HOME /config
 
 WORKDIR /app
 
