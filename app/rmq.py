@@ -31,7 +31,7 @@ class LibreMQ(MQConnector):
 
     def load_mq_config(self, config_path: str = "app/configs/config.json"):
         default_config_path = "app/configs/default_config.json"
-        if config_path:
+        if config_path is os.path.isfile(config_path):
             LOG.warning(f"Legacy configuration found at: {config_path}")
             with open(config_path) as config_file:
                 config = json.load(config_file)
